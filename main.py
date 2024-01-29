@@ -13,7 +13,7 @@ from datetime import date
 
 # CLI arguments
 txt_file_name = ""
-#save_path = "S:/Repositories/My-Development-Blog/_posts"
+#save_path = "S:/Repositories/My-Development-Blog/_posts/"
 save_path = "./"
 # Files in the _posts folder must be saved in the following format: YYYY-MM-DD-name-of-file.md
 
@@ -38,15 +38,19 @@ def process_cli_args():
 
 def parse_text():
     txt_file = open(txt_file_name, "r")
-
-    lines = txt_file.readlines()
-    write_contents(lines)
-
+    contents = txt_file.readlines()
     txt_file.close()
+    write_contents(contents)
 
 def write_contents(contents):
     md_file = create_file("-test")
+
+    # Write Front Matter
+    md_file.write("---\n")
+
+    md_file.write("---\n") 
     
+    # Write contents
     for line in contents:
         md_file.write(line)
 
