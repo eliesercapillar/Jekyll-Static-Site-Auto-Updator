@@ -1,21 +1,26 @@
 import sys
 import os.path
-from datetime import date
+from datetime import date, datetime
+from git import Repo
 
 # GitHub Pages will run a workflow to serve any changes to the site whenever a change is pushed to the correct branch.
 # So all this script needs to do is
-# - Open a .txt file DONE
+# - Open a .txt file
 # - Read .txt file contents
 # - Create a .md file containing the contents of the .txt
 # - Modify the Front Matter at the top of the .md file
-# - Save the new .md file in the correct repository directory. DONE
+# - Save the new .md file in the correct repository directory.
 # - Push the changes to GitHub.
 
 # CLI arguments
-txt_file_name = ""
-#save_path = "S:/Repositories/My-Development-Blog/_posts/"
-save_path = "./"
 # Files in the _posts folder must be saved in the following format: YYYY-MM-DD-name-of-file.md
+txt_file_name = ""
+save_path = "S:/Repositories/My-Development-Blog/_posts/"
+#save_path = "./"
+git_repo_path = "S:/Repositories/My-Development-Blog/.git"
+commit_msg = "Automated post commit via Python Script."
+
+# Constants
 
 def process_cli_args():
     # CLI arguments are assumed to be in the order of
@@ -43,15 +48,21 @@ def parse_text():
     write_contents(contents)
 
 def write_contents(contents):
-    md_file = create_file("-test")
+    md_file_name = "-" + txt_file_name[:-4] # Truncate .txt
+    md_file = create_file(md_file_name)
 
     # Write Front Matter
     md_file.write("---\n")
-
+    md_file.write("layout: single\n")
+    md_file.write(f"title: \"{contents[0][:-1]}\"\n")
+    md_file.write(f"date: {str(date.today())} {datetime.now().strftime('%H:%M:%S')} -0600\n")
+    md_file.write("categories: ex*periences\n")
+    md_file.write(f"permalink: /:categories/{txt_file_name[:-4]}\n")
     md_file.write("---\n") 
     
     # Write contents
-    for line in contents:
+    # Skip the title and the empty line
+    for line in contents[2:]:
         md_file.write(line)
 
     md_file.close()
@@ -62,12 +73,21 @@ def create_file(file_name):
     if os.path.exists(save_path):
         return open(os.path.join(save_path, formatted_file_name), "w")
     else:
-        print(f"The path {save_path} does not exist.\n")
+        print(f"The path {save_path} does not exist. File was not made.\n")
         return None
-
 
 def push_changes():
     print("Pushing changes to GitHub.\n")
+    try:
+        repo = Repo(git_repo_path)
+        repo.git.add(update=True)
+        repo.index.commit(commit_msg)
+        origin = repo.remote(name='gh-pages')
+        origin.push()
+        print("Successful push.\n")
+    except:
+        print('Some error occured while pushing the code') 
+
 
 if __name__ == '__main__':
     process_cli_args()

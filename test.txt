@@ -1,3 +1,0 @@
-Testing My Python Script
-
-This is some test content. Testing 123. Let's see if all of this is copied over into the .md file!
