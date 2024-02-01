@@ -9,7 +9,7 @@
 ## How To Use <a name = "Howto"></a>
 In a command line interface, go to the directory where this script is stored. 
 
-Type `python path/to/file.txt path/to/save/markdown/file.md`.
+Type `python main.py path/to/file.txt path/to/save/markdown/file.md`.
 
 The script takes 2 parameters:
 
