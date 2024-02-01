@@ -79,14 +79,30 @@ def create_file(file_name):
 def push_changes():
     print("Pushing changes to GitHub.\n")
     try:
+        print("Getting Repo.\n")
         repo = Repo(git_repo_path)
-        repo.git.add(update=True)
-        repo.index.commit(commit_msg)
-        origin = repo.remote(name='gh-pages')
-        origin.push()
+        #remote = f"https://{eliesercapillar}:@github.com/eliesercapillar/My-Development-Blog.git"
+        #Repo.clone_from(remote, git_repo_path)
+        print("Getting git.\n")
+        git = repo.git
+        print("Changing branches\n")
+        git.checkout('gh-pages')
+        #print("Pulling recent from branch\n")
+        #git.pull()
+        print("Getting origin\n")
+        origin = repo.remotes.origin
+        print("Adding changes.\n")
+        git.add('.')
+        print("Committing changes.\n")
+        git.commit('-m', commit_msg)
+        print("Getting origin\n")
+        #git.remote("rm", "origin")
+        #git.remote("add", "origin", "https://github.com/eliesercapillar/My-Development-Blog.git")
+        print("Pushing Changes.\n")
+        git.push(origin, 'gh-pages')
         print("Successful push.\n")
-    except:
-        print('Some error occured while pushing the code') 
+    except Exception as error:
+        print(f'Some error occured while pushing the code\nMessage is: {error}')
 
 
 if __name__ == '__main__':
