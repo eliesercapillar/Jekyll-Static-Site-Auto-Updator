@@ -81,8 +81,6 @@ def push_changes():
     try:
         print("Getting Repo.\n")
         repo = Repo(git_repo_path)
-        #remote = f"https://{eliesercapillar}:@github.com/eliesercapillar/My-Development-Blog.git"
-        #Repo.clone_from(remote, git_repo_path)
         print("Getting git.\n")
         git = repo.git
         print("Changing branches\n")
